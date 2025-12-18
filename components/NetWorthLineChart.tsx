@@ -1,6 +1,7 @@
 "use client";
 
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import CountUp from "react-countup";
 
 import {
   Card,
@@ -36,8 +37,20 @@ const NetWorthLineChart = () => {
   return (
     <Card className="h-full flex flex-col">
       <CardHeader className="pb-2">
-        <CardTitle>Net Worth</CardTitle>
-        <CardDescription>January – June 2024</CardDescription>
+        <CardDescription className="font-semibold font-inter ">
+          Net Worth
+        </CardDescription>
+        <CardTitle className="font-bold font-inter text-2xl text-slate-950">
+          <CountUp
+            start={0}
+            end={12540.78}
+            duration={2}
+            separator=","
+            decimals={2}
+            decimal="."
+            prefix="$"
+          ></CountUp>
+        </CardTitle>
       </CardHeader>
 
       {/* Let Flexbox size the chart area */}

@@ -6,8 +6,9 @@ export async function GET() {
 
   const { data, error } = await supabase
     .from("transactions")
-    .select("*")
-    .order("transaction_date", { ascending: false });
+    .select("id, merchant_name, amount, date")
+    .order("date", { ascending: false })
+    .limit(5);
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });

@@ -6,6 +6,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -40,8 +41,12 @@ const MonthlyIncomeExpenseChart = () => {
   return (
     <Card className="h-full flex flex-col">
       <CardHeader className="pb-2">
-        <CardTitle>Monthly Income vs Expense</CardTitle>
-        <CardDescription>Last 6 months</CardDescription>
+        <CardTitle className="font-bold font-inter text-2xl text-slate-950">
+          Spending
+        </CardTitle>
+        <CardDescription className="font-semibold font-inter ">
+          Last 3 months
+        </CardDescription>
       </CardHeader>
 
       {/* Let flexbox give this area the remaining height */}
@@ -65,6 +70,14 @@ const MonthlyIncomeExpenseChart = () => {
           </BarChart>
         </ChartContainer>
       </CardContent>
+      <CardFooter className="flex flex-row gap-2 items-center justify-center font-inter text-muted-foreground">
+        <div className="gap-2">
+          <span className="text-xl text-[#60a5fa]">•</span> Income
+        </div>
+        <div>
+          <span className="text-xl text-[#2563eb]">•</span> Total Spend
+        </div>
+      </CardFooter>
     </Card>
   );
 };
