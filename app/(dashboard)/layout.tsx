@@ -16,11 +16,11 @@ export default function RootLayout({
         } as React.CSSProperties
       }
     >
-      <AppSidebar variant="inset" />
+      <AppSidebar variant="sidebar" />
 
-      <SidebarInset>
+      <SidebarInset className="bg-white md:peer-data-[variant=inset]:m-0 md:peer-data-[variant=inset]:rounded-none md:peer-data-[variant=inset]:shadow-none">
         <SiteHeader />
-        <main className="flex flex-1 flex-col font-inter overflow-hidden">
+        <main className="flex flex-1 flex-col font-inter overflow-hidden ">
           {children}
         </main>
       </SidebarInset>

@@ -64,7 +64,7 @@ export default function AppSidebar(
   props: React.ComponentProps<typeof Sidebar>
 ) {
   return (
-    <Sidebar variant="inset" collapsible="offcanvas" {...props}>
+    <Sidebar variant="floating" collapsible="offcanvas" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>

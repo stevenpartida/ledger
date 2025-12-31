@@ -36,6 +36,7 @@ export default function NavMain({ items }: NavMainProps) {
                   tooltip={item.title}
                   data-active={isActive}
                   className="
+                  text-muted-foreground
                     data-[active=true]:bg-neutral-950
                     data-[active=true]:text-neutral-50
                   "

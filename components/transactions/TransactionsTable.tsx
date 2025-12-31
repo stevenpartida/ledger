@@ -1,11 +1,15 @@
 "use client";
 
+import * as React from "react";
+
 import {
-  ColumnDef,
   flexRender,
+  SortingState,
   getCoreRowModel,
-  getPaginationRowModel,
   useReactTable,
+  ColumnFiltersState,
+  getFilteredRowModel,
+  getSortedRowModel,
 } from "@tanstack/react-table";
 import {
   Table,
@@ -16,29 +20,50 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Input } from "../ui/input";
+import { TransactionColumns } from "@/components/transactions/TransactionsColumns";
+import { Transaction } from "@/lib/types/transaction";
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-}
+type TransactionsTableProps = {
+  data: Transaction[];
+};
 
-export function DataTable<TData, TValue>({
-  columns,
-  data,
-}: DataTableProps<TData, TValue>) {
+export function TransactionsTable({ data }: TransactionsTableProps) {
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
+
   const table = useReactTable({
     data,
-    columns,
+    columns: TransactionColumns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      columnFilters,
+      sorting,
+    },
   });
 
   return (
-    <div>
-      <div className="overflow-hidden rounded-md border">
-        <Table className="table-fixed border-collapse [&_th]:w-1/5 [&_td]:w-1/5">
+    <section className="font-inter">
+      <div className="font-inter my-4">
+        <Input
+          placeholder="Search Transaction..."
+          value={
+            (table.getColumn("merchant_name")?.getFilterValue() as string) ?? ""
+          }
+          onChange={(event) =>
+            table.getColumn("merchant_name")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+      </div>
+      <div>
+        <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -79,7 +104,7 @@ export function DataTable<TData, TValue>({
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length}
+                  colSpan={TransactionColumns.length}
                   className="h-24 text-center"
                 >
                   No results.
@@ -89,25 +114,6 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-between space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
-      </div>
-    </div>
+    </section>
   );
 }

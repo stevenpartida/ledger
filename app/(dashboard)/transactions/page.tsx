@@ -1,52 +1,29 @@
-"use client";
+import { TransactionsTable } from "@/components/transactions/TransactionsTable";
+import { createClient } from "@/lib/supabase/server";
 
-import React, { useEffect, useState } from "react";
-import HeaderBox from "@/components/HeaderBox";
-import { AccountDropdown } from "@/components/AccountDropdown";
-import { DataTable } from "./data-table";
-import { columns, Transaction } from "./columns";
+async function getTransactions() {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("transactions")
+    .select(
+      "id, merchant_name, amount, date, logo_url, pending, category_primary, payment_channel"
+    )
+    .order("date", { ascending: false });
 
-const TransactionHistory = () => {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  if (error) throw error;
+  return data ?? [];
+}
 
-  useEffect(() => {
-    const fetchTransactions = async () => {
-      try {
-        const res = await fetch("/api/supabase/transactions");
-        if (!res.ok) {
-          console.error("Error Fetching: ", res.status);
-          return;
-        }
-
-        const data = await res.json();
-        console.log("🔥 FETCHED TRANSACTIONS:", data); // <--- IMPORTANT STEP
-        setTransactions(data);
-      } catch (err) {
-        console.error("Request failed:", err);
-      }
-    };
-    fetchTransactions();
-  }, []);
+export default async function Transactions() {
+  const transactions = await getTransactions();
 
   return (
-    <section className="font-inter min-h-screen w-full p-4 space-y-6">
-      <div className="flex w-full items-start justify-between p-8">
+    <section className="flex flex-col p-4 lg:p-6">
+      <div className="@container/main felx gap-2">
         <div>
-          <HeaderBox
-            title="Transaction History"
-            subtext="Manage and Track Your Transaction History"
-          />
+          <TransactionsTable data={transactions} />
         </div>
-        <div>
-          <AccountDropdown />
-        </div>
-      </div>
-
-      <div className="p-8">
-        <DataTable columns={columns} data={transactions} />
       </div>
     </section>
   );
-};
-
-export default TransactionHistory;
+}

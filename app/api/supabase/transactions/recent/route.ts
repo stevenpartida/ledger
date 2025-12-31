@@ -6,7 +6,7 @@ export async function GET() {
 
   const { data, error } = await supabase
     .from("transactions")
-    .select("id, merchant_name, amount, date")
+    .select("id, merchant_name, amount, date, logo_url")
     .order("date", { ascending: false })
     .limit(5);
 
